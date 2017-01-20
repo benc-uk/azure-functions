@@ -1,0 +1,20 @@
+{
+  "bindings": [
+    {
+      "name": "inputQueueMsg",
+      "type": "serviceBusTrigger",
+      "direction": "in",
+      "queueName": "simpleq",
+      "connection": "simpleq-conn",
+      "accessRights": "Listen"
+    },
+    {
+      "type": "blob",
+      "name": "outputBlob",
+      "path": "outputfiles/{rand-guid}.txt",
+      "connection": "functionstorage2016_STORAGE",
+      "direction": "out"
+    }
+  ],
+  "disabled": false
+}

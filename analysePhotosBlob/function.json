@@ -1,0 +1,12 @@
+{
+  "bindings": [
+    {
+      "name": "triggerBlob",
+      "type": "blobTrigger",
+      "direction": "in",
+      "path": "photos/{name}",
+      "connection": "functionstorage2016_STORAGE"
+    }
+  ],
+  "disabled": false
+}
