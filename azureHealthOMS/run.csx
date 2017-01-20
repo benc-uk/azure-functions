@@ -7,13 +7,13 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 // Change keys and other business as required
-const string EVENT_TYPE    = "AzureHealth";
-const string WORKSPACE_ID  = "26d0a5a4-ef74-4129-a665-15924e3956a5";
-const string SHARED_KEY    = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-const string AZURE_SUB     = "52512f28-c6ed-403e-9569-82a9fb9fec91";
-const string AZURE_TENANT  = "72f988bf-86f1-41af-91ab-2d7cd011db47";
-const string AZURE_CLID    = "2ea33f5c-676b-4821-9b30-d5228e8ef4c2";
-const string AZURE_KEY     = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+static string EVENT_TYPE    = "AzureHealth";
+static string WORKSPACE_ID  = "26d0a5a4-ef74-4129-a665-15924e3956a5";
+static string SHARED_KEY    = Environment.GetEnvironmentVariable("OMS_SHARED_KEY");
+static string AZURE_SUB     = "52512f28-c6ed-403e-9569-82a9fb9fec91";
+static string AZURE_TENANT  = "72f988bf-86f1-41af-91ab-2d7cd011db47";
+static string AZURE_CLID    = "2ea33f5c-676b-4821-9b30-d5228e8ef4c2";
+static string AZURE_KEY     = Environment.GetEnvironmentVariable("AZURE_AUTH_SECRET");
 static TraceWriter logger;
 
 //
