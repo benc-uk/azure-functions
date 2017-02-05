@@ -1,0 +1,12 @@
+{
+  "bindings": [
+    {
+      "type": "blobTrigger",
+      "name": "photoBlob",
+      "path": "photos-py/{name}",
+      "connection": "functionstorage2016_STORAGE",
+      "direction": "in"
+    }
+  ],
+  "disabled": false
+}
