@@ -1,6 +1,5 @@
 using System.Security.Cryptography;
 using Newtonsoft.Json;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -140,32 +139,6 @@ public static string getAzureLoginToken(string tenant_id, string client_id, stri
 }
 
 //
-// Send JSON array of events to Log Analytics
-//  - Note had to use WebClient rather than HttpClient as the API is weird and very fussy
-//
-public static void postToLogAnalytics(string signature, string date, string json_event_array)
-{
-    string url = "https://"+ WORKSPACE_ID +".ods.opinsights.azure.com/api/logs?api-version=2016-04-01"; 
-    using (var client = new WebClient())
-    {
-        // NOTE. API call will fail if encoding is set, it's likely a bug in the API :(
-        //client.Encoding = System.Text.Encoding.UTF8;
-        client.Headers.Add(HttpRequestHeader.ContentType, "application/json");
-        client.Headers.Add("Log-Type", EVENT_TYPE);
-        client.Headers.Add("Authorization", "SharedKey " + signature);
-        client.Headers.Add("x-ms-date", date);
-        client.Headers.Add("time-generated-field", "");
-        try {
-            //logger.Info(json);
-            var rsp = client.UploadString(new Uri(url), "POST", json_event_array);
-            logger.Info("*** Health data posted to OMS Log Analytics OK");
-        } catch (WebException e) {
-            logger.Error("### Error posting log data " + e.ToString());
-        }
-    }
-}
-
-//
 // Create a HMAC-SHA256 & Base64 encoded signature
 //
 public static string buildSignature(string message, string secret)
@@ -180,23 +153,27 @@ public static string buildSignature(string message, string secret)
     }
 }
 
-// NOT USED - Attempt to use HttpClient
-public static void postToLogAnalyticsNEW(string signature, string date, string json)
+//
+// Send JSON array of events to Log Analytics
+//
+public static void postToLogAnalytics(string signature, string date, string json_event_array)
 {
     string url = "https://"+ WORKSPACE_ID +".ods.opinsights.azure.com/api/logs?api-version=2016-04-01";
             
-    var string_content = new StringContent(json, Encoding.UTF8, "application/json");
+    var string_content = new StringContent(json_event_array, Encoding.UTF8);
+    var content_header = new MediaTypeHeaderValue("application/json");
+    //content_header.CharSet = "utf-8";
+    string_content.Headers.ContentType = content_header;
     var client = new HttpClient();
     client.DefaultRequestHeaders.Add("Log-Type", EVENT_TYPE);
     client.DefaultRequestHeaders.Add("x-ms-date", date);
     client.DefaultRequestHeaders.Add("time-generated-field", "");
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("SharedKey", signature);
-
+    
     var resp = client.PostAsync(url, string_content).Result;   
     if(resp.IsSuccessStatusCode) {
-        logger.Info("########################## WWWWOOOOOOOOWWWWWWWW");
+        logger.Info("*** Health data posted to OMS Log Analytics OK");
     } else {
-        logger.Error($"### Bummer can't login to Azure AD:\n {resp}");
-
+        logger.Error($"### Bummer can't post events to Log Analytics:\n {resp}");
     }
 }
