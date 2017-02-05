@@ -9,7 +9,7 @@ using Microsoft.ProjectOxford.Vision.Contract;
 
 // Parameters...
 static string API_KEY = Environment.GetEnvironmentVariable("VISION_API_KEY");
-static string API_ENDPOINT = "https://api.projectoxford.ai/vision/v1.0/describe";
+static string API_ENDPOINT = "https://westus.api.cognitive.microsoft.com/vision/v1.0/describe";
 static string LOGIC_APP_ENDPOINT = "https://prod-01.northeurope.logic.azure.com:443/workflows/7420133847ba422fa162794501e3c078/triggers/manual/run?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=4nLf31aooFepxZ73DvX48ORpBUUjQ0ZJvZfuGGKAwxk";
 static string EMAIL_TO = "benc.uk@gmail.com";
 
