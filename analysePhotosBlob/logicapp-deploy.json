@@ -1,0 +1,132 @@
+{
+   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+   "contentVersion": "1.0.0.0",
+   "parameters": {
+      "logicapp_name": {
+         "defaultValue": "EmailSender",
+         "type": "string"
+      },
+      "outlook_connection_name": {
+         "defaultValue": "outlook",
+         "type": "string"
+      }
+   },
+   "variables": {},
+   "resources": [
+      {
+         "type": "Microsoft.Web/connections",
+         "apiVersion": "2016-06-01",
+         "location": "[resourceGroup().location]",
+         "name": "[parameters('outlook_connection_name')]",
+         "properties": {
+            "api": {
+               "id": "[concat(subscription().id,'/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/outlook')]"
+            },
+            "displayName": "Outlook.com connection",
+            "parameterValues": {}
+         }
+      },
+      {
+         "comments": "EmailSender Logic App",
+         "type": "Microsoft.Logic/workflows",
+         "name": "[parameters('logicapp_name')]",
+         "apiVersion": "2016-06-01",
+         "location": "[resourceGroup().location]",
+         "dependsOn": [
+            "[resourceId('Microsoft.Web/connections', parameters('outlook_connection_name'))]"
+         ],
+         "properties": {
+            "state": "Enabled",
+            "definition": {
+               "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+               "contentVersion": "1.0.0.0",
+               "parameters": {
+                  "$connections": {
+                     "defaultValue": {},
+                     "type": "Object"
+                  }
+               },
+               "triggers": {
+                  "manual": {
+                     "type": "Request",
+                     "kind": "Http",
+                     "inputs": {
+                        "schema": {
+                           "properties": {
+                              "email_body": {
+                                 "type": "string"
+                              },
+                              "email_subject": {
+                                 "type": "string"
+                              },
+                              "email_to": {
+                                 "type": "string"
+                              }
+                           },
+                           "required": [
+                              "email_subject",
+                              "email_to",
+                              "email_body"
+                           ],
+                           "type": "object"
+                        }
+                     }
+                  }
+               },
+               "actions": {
+                  "Response": {
+                     "runAfter": {
+                        "Send_an_email": [
+                           "Succeeded"
+                        ]
+                     },
+                     "type": "Response",
+                     "inputs": {
+                        "body": {
+                           "status": "OK"
+                        },
+                        "headers": {
+                           "content-type": "application/json"
+                        },
+                        "statusCode": 200
+                     }
+                  },
+                  "Send_an_email": {
+                     "runAfter": {},
+                     "type": "ApiConnection",
+                     "inputs": {
+                        "body": {
+                           "Body": "@{triggerBody()['email_body']}",
+                           "IsHtml": true,
+                           "Subject": "@{triggerBody()['email_subject']}",
+                           "To": "@{triggerBody()['email_to']}"
+                        },
+                        "host": {
+                           "api": {
+                              "runtimeUrl": "https://logic-apis-northeurope.azure-apim.net/apim/outlook"
+                           },
+                           "connection": {
+                              "name": "@parameters('$connections')['outlook_conn']['connectionId']"
+                           }
+                        },
+                        "method": "post",
+                        "path": "/Mail"
+                     }
+                  }
+               },
+               "outputs": {}
+            },
+            "parameters": {
+               "$connections": {
+                  "value": {
+                     "outlook_conn": {
+                        "connectionId": "[resourceId('Microsoft.Web/connections', parameters('outlook_connection_name'))]",
+                        "id": "[concat(subscription().id,'/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/outlook')]"
+                     }
+                  }
+               }
+            }
+         }
+      }
+   ]
+}
