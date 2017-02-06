@@ -35,9 +35,9 @@ tags = [tag.encode('utf-8') for tag in api_result_object['description']['tags']]
 print("### I spy with my little eye: {0}".format(desc))
 
 email_dict = {
-    'email_to': EMAIL_TO,
-    'email_subject': "Azure - image recognition results for: {0}".format(os.environ['photoBlob']),
-    'email_body': "<h1 style='color:grey'>Azure Logic Apps and Functions Demo results</h1><h2>That photo looks like: {0}</h2><br/><img style='max-width:1024px' src='{1}'/><br/><h2>Photo tags:<br/>{2}</h2><br/> BYE!".format(desc, "", tags)
+  'email_to': EMAIL_TO,
+  'email_subject': "Azure - image recognition results for: {0}".format(os.environ['photoBlob']),
+  'email_body': "<h1 style='color:grey'>Azure Logic Apps and Functions Demo results</h1><h2>That photo looks like: {0}</h2><br/><img style='max-width:1024px' src='{1}'/><br/><h2>Photo tags:<br/>{2}</h2><br/> BYE!".format(desc, "", tags)
 }
 
 print("### Calling Azure Logic app for email sending stuff...")
