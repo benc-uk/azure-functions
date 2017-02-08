@@ -4,14 +4,15 @@ This is a small shared repo of demo and sample Azure Functions. They are either 
 
 Several of these functions require secure bits of info like secret keys, these are fetched from environmental variables. To set these variables go into the Function App, and configure app settings as [described here](https://docs.microsoft.com/en-us/azure/azure-functions/functions-how-to-use-azure-function-app-settings)
 
+Where additional dependant Azure resources are needed, an ARM template is supplied in each function folder called **'resources-deploy.json'**. Configuring the input and output bindings of the function to point at these resources is currently left as a manual task, but is normally trival
+
 ### analysePhotosBlob
-This reads a photo from blob storage, then analyses the image with the Azure Cognitive APIs (computer vision) then sends the results as an email, through a Logic App. The results will contain what the computer vision service thinks the photo is of. Demonstrates:
-* Triggering from blob storage
+This reads a photo from blob storage, then analyses the image with the Azure Cognitive APIs (computer vision) then sends the results as an email, through a Logic App. The results will contain a description of what the computer vision service thinks the photo is of
+* Triggering from files uploaded to blob storage
 * Integration with a REST API
 * Integration with Logic Apps via REST
-* Note. See 'logicapp-deploy.json' in function folder for ARM template to deploy the Logic App
 * Required app settings: VISION_API_KEY, LOGIC_APP_ENDPOINT
-* Dependant Azure resources: Cognative API, Logic App, Storage Account
+* Dependant Azure resources: Cognative API, Logic App, Storage Account (reuse the one that the Function App requires)
 
 ### serviceBusDemo
 This function is bound to a Service Bus queue, any messages posted on the queue are read, deseralized as JSON, then pushed as output to blob storage
@@ -39,8 +40,7 @@ Example of both HTTP JSON webhook and Azure Tables as output, designed to be cal
 * Triggering from HTTP Webhook + JSON
 * Output to HTTP response
 * Output to Azure Table storage
-* Note. See 'logicapp-deploy.json' in function folder for ARM template to deploy the Logic App
-* Dependant Azure resources: Storage Account
+* Dependant Azure resources: Storage Account (reuse the one that the Function App requires)
 
 ### pythonPhotoAnalyse 
 Example of using Python in Azure Functions, Python support is still experimental. This function replicates the same scenario as *analysePhotosBlob* and has the same requirements
