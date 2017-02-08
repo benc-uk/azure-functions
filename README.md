@@ -7,6 +7,7 @@ This reads a photo from blob storage, then analyses the image with the Azure Cog
 * Triggering from blob storage
 * Integration with a REST API
 * Integration with Logic Apps via REST
+* Note. See 'logicapp-deploy.json' in function folder for ARM template to deploy the Logic App
 
 ### serviceBusDemo
 This function is bound to a Service Bus queue, any messages posted on the queue are read, deseralized as JSON, then pushed as output to blob storage
@@ -23,9 +24,16 @@ JSON transformation and REST API calls are used
 
 ### callLibraryDLL
 Integration with native/external code in a DLL, Function is a HTTP trigger which in turn triggers a method in the DLL
-* Tiggering from HTTP 
+* Triggering from HTTP 
 * .NET Reflection to load a DLL
 * Passing data from HTTP request to DLL method callLibraryDLL
+
+### saveTweetToTable 
+Example of both HTTP JSON webhook and Azure Tables as output, designed to be called from Azure Logic App which is reading Tweets and calling this function
+* Triggering from HTTP Webhook + JSON
+* Output to HTTP response
+* Output to Azure Table storage
+* Note. See 'logicapp-deploy.json' in function folder for ARM template to deploy the Logic App
 
 ### pythonPhotoAnalyse 
 Example of using Python in Azure Functions, Python support is still experimental. This function replicates the same scenario as *analysePhotosBlob*
