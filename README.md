@@ -17,7 +17,7 @@ This reads a photo from blob storage, then analyses the image with the Azure Cog
 This function is bound to a Service Bus queue, any messages posted on the queue are read, deseralized as JSON, then pushed as output to blob storage
 * Triggering from Service Bus queue
 * Output to blobs
-* Dependant Azure resources: Service Bus & single queue
+* Dependant Azure resources: Service Bus with a single queue
 
 ### azureHealthOMS
 An integration use case that reads from the Azure Resource Health API and pushes data over to OMS Log Analytics, so that it's avaiable to query and report/alert on
