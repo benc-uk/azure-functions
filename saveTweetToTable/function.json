@@ -1,0 +1,26 @@
+{
+  "bindings": [
+    {
+      "type": "httpTrigger",
+      "direction": "in",
+      "webHookType": "genericJson",
+      "name": "req",
+      "methods": [
+        "post"
+      ]
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "res"
+    },
+    {
+      "type": "table",
+      "name": "outputTweetTable",
+      "tableName": "TechReadyTweets",
+      "connection": "functionstorage2016_STORAGE",
+      "direction": "out"
+    }
+  ],
+  "disabled": false
+}
