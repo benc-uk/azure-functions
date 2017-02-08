@@ -13,7 +13,7 @@ This reads a photo from blob storage, then analyses the image with the Azure Cog
 * Required app settings: VISION_API_KEY, LOGIC_APP_ENDPOINT
 * Dependant Azure resources: Cognative API, Logic App, Storage Account
 
-`### serviceBusDemo
+### serviceBusDemo
 This function is bound to a Service Bus queue, any messages posted on the queue are read, deseralized as JSON, then pushed as output to blob storage
 * Triggering from Service Bus queue
 * Output to blobs
