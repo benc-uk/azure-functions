@@ -1,0 +1,124 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "logicapp_name": {
+            "defaultValue": "TweetSearch",
+            "type": "string"
+        },
+        "function_app_name": {
+            "defaultValue": "demofunction",
+            "type": "string"
+        },
+        "function_name": {
+            "defaultValue": "saveTweetToTable",
+            "type": "string"
+        },
+        "twitter_connection_name": {
+            "defaultValue": "twitter",
+            "type": "string"
+        },
+        "twitter_search_query": {
+            "defaultValue": "#helloworld",
+            "type": "string"
+        },
+        "twitter_search_freq": {
+            "defaultValue": 5,
+            "type": "int"
+        }        
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "location": "[resourceGroup().location]",
+            "name": "[parameters('twitter_connection_name')]",
+            "properties": {
+                "api": {
+                    "id": "[concat(subscription().id,'/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/twitter')]"
+                },
+                "displayName": "Twitter connection",
+                "parameterValues": {}
+            }
+        },
+        {
+            "comments": "Twitter Search Logic App",
+            "type": "Microsoft.Logic/workflows",
+            "name": "[parameters('logicapp_name')]",
+            "apiVersion": "2016-06-01",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/connections', parameters('twitter_connection_name'))]"
+            ],
+            "properties": {
+                "state": "Enabled",
+                "definition": {
+                    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "$connections": {
+                            "defaultValue": {},
+                            "type": "Object"
+                        }
+                    },
+                    "triggers": {
+                        "When_a_new_tweet_is_posted": {
+                            "recurrence": {
+                                "frequency": "Minute",
+                                "interval": "[parameters('twitter_search_freq')]"
+                            },
+                            "splitOn": "@triggerBody()?.value",
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "api": {
+                                        "runtimeUrl": "https://logic-apis-westeurope.azure-apim.net/apim/twitter"
+                                    },
+                                    "connection": {
+                                        "name": "@parameters('$connections')['twitter_conn']['connectionId']"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "/onnewtweet",
+                                "queries": {
+                                    "searchQuery": "[parameters('twitter_search_query')]"
+                                }
+                            }
+                        }
+                    },
+                    "actions": {
+                        "saveTweetToTable": {
+                            "runAfter": {},
+                            "type": "Function",
+                            "inputs": {
+                                "body": {
+                                    "CreatedAtIso": "@triggerBody()?['CreatedAtIso']",
+                                    "TweetId": "@triggerBody()?['TweetId']",
+                                    "TweetLanguageCode": "@triggerBody()?['TweetLanguageCode']",
+                                    "TweetText": "@triggerBody()?['TweetText']",
+                                    "TweetedBy": "@triggerBody()?['TweetedBy']"
+                                },
+                                "function": {
+                                    "id": "/subscriptions/52512f28-c6ed-403e-9569-82a9fb9fec91/resourceGroups/Demo.Serverless/providers/Microsoft.Web/sites/demofunction/functions/saveTweetToTable",
+                                    //"id": "[concat(resourceId('Microsoft.Web/sites', parameters('function_app_name')), '/functions/', parameters('function_name'))]"
+                                }
+                            }
+                        }
+                    },
+                    "outputs": {}
+                },
+                "parameters": {
+                    "$connections": {
+                        "value": {
+                            "twitter_conn": {
+                                "connectionId": "[resourceId('Microsoft.Web/connections', parameters('twitter_connection_name'))]",
+                                "id": "[concat(subscription().id,'/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/twitter')]"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}
