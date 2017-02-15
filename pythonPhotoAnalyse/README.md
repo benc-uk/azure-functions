@@ -5,7 +5,7 @@ Info taken from [this blog](https://michael-mckenna.com/how-to-import-python-ext
 
 **Note:** In Azure we're going to install all these modules in a virtual environment so we've got a nice isolated area with all our packages. 
 So Python knows to import our libraries from this location make sure you have 
-`sys.path.append(os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'env/Lib/site-packages')))` in any file that imports these libraries.
+`sys.path.append(os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'python-env/Lib/site-packages')))` in any file that imports these libraries.
 
 ### Setup Steps
 
