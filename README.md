@@ -17,7 +17,7 @@ This reads a photo from blob storage, then analyses the image with the Azure Cog
 ### serviceBusDemo
 This function is bound to a Service Bus queue, any messages posted on the queue are read, deseralized as JSON, then pushed as output to blob storage
 * Triggering from Service Bus queue
-* Output to blobs
+* Output to Blobs
 * Dependant Azure resources: Service Bus with a single queue
 
 ### azureHealthOMS
@@ -34,6 +34,14 @@ Integration with native/external code in a DLL, Function is a HTTP trigger which
 * Triggering from HTTP 
 * .NET Reflection to load a DLL
 * Passing data from HTTP request to DLL method callLibraryDLL
+
+### iotEventsDemo
+This function is bound to a Service Bus queue, which in turn is bound to an IoT Event Hub. Any incoming device messages sent to the IoT hub are picked up and saved to blob storage and put into an Azure Table.  
+Full details are included in a **[separate dedicated Github repo](https://github.com/benc-uk/azure-iot-demo)**
+* Triggering from Service Bus queue
+* Output to Blobs
+* Output to Azure Table storage
+* Dependant Azure resources: Service Bus with a single queue
 
 ### saveTweetToTable 
 Example of both HTTP JSON webhook and Azure Tables as output, designed to be called from Azure Logic App which is reading Tweets and calling this function

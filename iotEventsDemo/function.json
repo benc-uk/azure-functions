@@ -1,0 +1,27 @@
+{
+  "bindings": [
+    {
+      "name": "myQueueItem",
+      "type": "serviceBusTrigger",
+      "direction": "in",
+      "queueName": "iot-events-q",
+      "connection": "iotdemobc.servicebus",
+      "accessRights": "Listen"
+    },
+    {
+      "type": "blob",
+      "name": "outputBlob",
+      "path": "iot-messages/{rand-guid}.csv",
+      "connection": "AzureWebJobsStorage",
+      "direction": "out"
+    },
+    {
+      "type": "table",
+      "name": "outputTable",
+      "tableName": "iottable",
+      "connection": "AzureWebJobsStorage",
+      "direction": "out"
+    }
+  ],
+  "disabled": false
+}
