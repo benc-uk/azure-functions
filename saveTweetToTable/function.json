@@ -17,8 +17,8 @@
     {
       "type": "table",
       "name": "outputTweetTable",
-      "tableName": "TechReadyTweets",
-      "connection": "functionstorage2016_STORAGE",
+      "tableName": "Tweets",
+      "connection": "AzureWebJobsStorage",
       "direction": "out"
     }
   ],

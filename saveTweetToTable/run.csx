@@ -12,7 +12,7 @@ public static async Task<object> Run(HttpRequestMessage req, ICollector<Tweet> o
     log.Info($"### New tweet received: "+tweet_input.TweetId); 
 
     try {
-        // Create POCO to hold tweet data
+        // Create POCO to hold tweet loaded from JSON in the input request
         Tweet t = new Tweet();
         string dayISO = tweet_input.CreatedAtIso.ToString("o").Substring(0, 10);
         t.PartitionKey = dayISO;
@@ -21,8 +21,14 @@ public static async Task<object> Run(HttpRequestMessage req, ICollector<Tweet> o
         t.User = tweet_input.TweetedBy;
         t.Lang = tweet_input.TweetLanguageCode;
 
+        log.Info($"### RT count: "+tweet_input.RetweetCount);
+
         // Add POCO to collection for the Webjob SDK to magically push into the output Table
-        outputTweetTable.Add(t);
+        // Modified to ignore retweets
+        if(tweet_input.RetweetCount == 0) {
+            log.Info($"### Adding tweet to table"); 
+            outputTweetTable.Add(t);
+        }
     } catch(Exception e) {
         // Bummer return a HTTP 400 and spit out some logs
         log.Error("!!! "+e.ToString());
@@ -32,7 +38,7 @@ public static async Task<object> Run(HttpRequestMessage req, ICollector<Tweet> o
     }
 
     // All cool, return HTTP 200
-    log.Info($"### Tweet inserted into Azure table OK, bye"); 
+    log.Info($"### Tweet processed OK, bye"); 
     return req.CreateResponse(HttpStatusCode.OK, new {
         greeting = $"OK!"
     });
