@@ -5,7 +5,16 @@
       "type": "blobTrigger",
       "direction": "in",
       "path": "photos/{name}",
-      "connection": "functionstorage2016_STORAGE"
+      "connection": "AzureWebJobsStorage"
+    },
+    {
+      "type": "sendGrid",
+      "name": "email",
+      "apiKey": "SENDGRID_API_KEY",
+      "to": "benc.uk@gmail.com",
+      "from": "benc.uk@gmail.com",
+      "subject": "Azure Functions & Computer Vision Results",
+      "direction": "out"
     }
   ],
   "disabled": false

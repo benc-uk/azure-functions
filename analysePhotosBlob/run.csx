@@ -1,23 +1,26 @@
+#r "SendGrid"
+#r "Newtonsoft.Json"
+#r "Microsoft.WindowsAzure.Storage"
+
 using Microsoft.WindowsAzure.Storage.Blob;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using Microsoft.ProjectOxford.Vision;
-using Microsoft.ProjectOxford.Vision.Contract;
+using SendGrid.Helpers.Mail;
 
 // Parameters...
 static string API_KEY = Environment.GetEnvironmentVariable("VISION_API_KEY");
-static string API_ENDPOINT = "https://westus.api.cognitive.microsoft.com/vision/v1.0/describe";
-static string LOGIC_APP_ENDPOINT = Environment.GetEnvironmentVariable("LOGIC_APP_ENDPOINT");
-static string EMAIL_TO = "benc.uk@gmail.com";
+static string API_ENDPOINT = "https://westeurope.api.cognitive.microsoft.com/vision/v1.0/describe";
 
 // Triggered Azure Function
 // - Bound to a CloudBlockBlob as the input trigger
-public static void Run(CloudBlockBlob triggerBlob, string name, TraceWriter log)
+public static void Run(CloudBlockBlob triggerBlob, string name, TraceWriter log, out Mail email)
 {
-    log.Info($"### Triggered function on new blob: {triggerBlob.Name}.");
+    Mail msg = new Mail();
+    email = msg;    
+    log.Info($"### Triggered function on new blob: {triggerBlob.Name}. KEY {API_KEY}");
 
     // Build simple JSON request containing blob URL and POST to Computer Vision API
     // - Note, we just pass the URL of the blob (image file) to the API
@@ -34,16 +37,19 @@ public static void Run(CloudBlockBlob triggerBlob, string name, TraceWriter log)
 
     log.Info($"### I spy with my little eye: {desc}");
 
-    // Send email with result to myself, using Azure Logic App
-    dynamic email_req = new {     
-        email_to = EMAIL_TO,
-        email_subject= $"Azure - image recognition results for: {triggerBlob.Name}",
-        email_body = $"<h1 style='color:grey'>Azure Logic Apps and Functions Demo results</h1><h2>That photo looks like: {desc}</h2><br/><img style='max-width:1024px' src='{triggerBlob.Uri.ToString()}'/><br/><h2>Photo tags:<br/>{tags}</h2><br/> BYE!",
+    // Format email for SendGrid
+    msg.Subject = $"Azure Functions demo result for: {triggerBlob.Name}";
+    Content content = new Content {
+        Type = "text/html",
+        Value = $"<h1 style='color:grey'>Azure Functions &amp; Cognitive Services Demo Results</h1><h2>That photo looks like: {desc}</h2><br/><img style='max-width:1024px' src='{triggerBlob.Uri.ToString()}'/><br/><h2>Photo tags:<br/>{tags}</h2><br/> BYE!"
     };
-    var email_resp = postREST(LOGIC_APP_ENDPOINT, email_req, log);
-    log.Info("### EMAIL SENT "+ email_resp.ToString());
+    msg.AddContent(content);   
+    log.Info($"### Emailing results via SendGrid");
 }
 
+//
+// Simple HTTP POST call and JSON convert results 
+//
 public static dynamic postREST(string url, dynamic request_obj, TraceWriter log)
 {
     var client = new HttpClient();
