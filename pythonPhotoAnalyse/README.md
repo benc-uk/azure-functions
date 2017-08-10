@@ -1,28 +1,20 @@
 ## Python Setup
 
-These steps are required to set-up a python Function with custom modules & extensions.
-Info taken from [this blog](https://michael-mckenna.com/how-to-import-python-extension-modules-in-azure-functions/) and duplicated here
-
-**Note:** In Azure we're going to install all these modules in a virtual environment so we've got a nice isolated area with all our packages. 
-So Python knows to import our libraries from this location make sure you have 
-`sys.path.append(os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'python-env/Lib/site-packages')))` in any file that imports these libraries.
+These steps are required to set-up a python Function with a custom runtime version and libraries installable via pip.
+Info taken from [this excellent blog](https://prmadi.com/running-python-code-on-azure-functions-app/) and duplicated here
 
 ### Setup Steps
 
-1. Open up kudu by clicking the "Go to Kudu" button under "Function app settings". Navigate to your function folder
+1. Open up the Kudu console, from your Function App in the Azure Portal, click *Platform Features* -> *Console* or go to `https://<your_function_app_name>.scm.azurewebsites.net/DebugConsole` and run the following command. It might take several minutes to complete.
 
-        cd D:\home\site\wwwroot
-
-2. Set up your python virtual environment, the python executable is just installed in the normal place. Here "python-env" is the new directory that will be created in your wwwroot
+        nuget.exe install -Source https://www.siteextensions.net/api/v2/ -OutputDirectory D:\home\site\tools python352x64  
+        
+2. Move the output to the tools directory with the following command
          
-         D:\Python27\Scripts\virtualenv.exe python-env
+         mv /d/home/site/tools/python352x64.3.5.2.6/content/python35/* /d/home/site/tools/
 
-3. Activate your virtual environment 
+3. From the same console window you can now use pip to install libraries, e.g.
        
-        "python-env/Scripts/activate.bat"
+        D:\home\site\tools\python.exe -m pip install requests  
         
-4. Install modules using pip, e.g. install requests
- 
-        pip install requests
-        
-5. Exit Kudu
+For this example function to work, install the following libraries `requests`, `python_http_client` and `sendgrid`
