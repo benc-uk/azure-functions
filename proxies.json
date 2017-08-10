@@ -1,0 +1,15 @@
+{
+    "$schema": "http://json.schemastore.org/proxies",
+    "proxies": {
+        "demo-api": {
+            "matchCondition": {
+                "route": "/apidemo/{id}",
+                "methods": [
+                    "GET",
+                    "DELETE"
+                ]
+            },
+            "backendUri": "https://functions-app-demo.azurewebsites.net/api/exampleApi_{request.method}?id={id}&code=12345-CHANGEME-12345"
+        }
+    }
+}
