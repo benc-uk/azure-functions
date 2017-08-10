@@ -4,15 +4,22 @@ This is a small shared repo of demo and sample Azure Functions. They are either 
 
 Several of these functions require secure bits of info like secret keys, these are fetched from environmental variables. To set these variables go into the Function App, and configure app settings as [described here](https://docs.microsoft.com/en-us/azure/azure-functions/functions-how-to-use-azure-function-app-settings)
 
-Where additional dependant Azure resources are needed, an ARM template is supplied in each function folder called **'resources-deploy.json'**. Configuring the input and output bindings of the function to point at these resources is currently left as a manual task, but is normally trival
+## Quick Deploy to Azure
+If you wish to deploy a new Function App with all of these demo functions you can use the following quick deployment ARM template  
+[![deploy](https://raw.githubusercontent.com/benc-uk/azure-arm/master/etc/azuredeploy.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fbenc-uk%2Fazure-arm%2Fmaster%2Fpaas-other%2Ffunction-app-withcode%2Fazuredeploy.json)  
+
+Where additional dependant Azure resources are needed, an ARM template is supplied in each function folder called **'resources-deploy.json'**. Configuring the input and output bindings of the function to point at these resources is currently left as a manual task, but is normally trivial
+
+## Functions List
 
 ### analysePhotosBlob
-This reads a photo from blob storage, then analyses the image with the Azure Cognitive APIs (computer vision) then sends the results as an email, through a Logic App. The results will contain a description of what the computer vision service thinks the photo is of
+This reads a photo from blob storage, then analyses the image with the Azure Cognitive Services (Computer Vision API) then sends the results as an email, through SendGrid. The results will contain a description of what the computer vision service thinks the photo is of
 * Triggering from files uploaded to blob storage
 * Integration with a REST API
-* Integration with Logic Apps via REST
-* Required app settings: VISION_API_KEY, LOGIC_APP_ENDPOINT
-* Dependant Azure resources: Cognative API, Logic App, Storage Account (reuse the one that the Function App requires)
+* Integration with Cognitive Services
+* Required app settings: VISION_API_KEY, SENDGRID_API_KEY
+* Dependant Azure resources: Cognitive API, Storage Account (reuse the one that the Function App requires)
+* Requires a SendGrid account and API key, [which is free to sign up and use](https://app.sendgrid.com/signup)
 
 ### serviceBusDemo
 This function is bound to a Service Bus queue, any messages posted on the queue are read, deseralized as JSON, then pushed as output to blob storage
@@ -52,5 +59,11 @@ Example of both HTTP JSON webhook and Azure Tables as output, designed to be cal
 
 ### pythonPhotoAnalyse 
 Example of using Python in Azure Functions, Python support is still experimental. This function replicates the same scenario as *analysePhotosBlob* and has the same requirements
-* See README.md in function sub-folder for setup of Python with external modules
+* See [README.md](pythonPhotoAnalyse/) in function sub-folder for setup of Python
+
+### exampleApi_Get & exampleApi_Delete
+These functions are used with the Function Proxies feature to create a serverless REST API. The proxy is set up to route HTTP requests to `/apidemo/{id}` to the backend functions `exampleApi_Get` & `exampleApi_Delete` the HTTP method used (e.g. `GET` or `DELETE`) determines which function is invoked, using the `{request.method}` parameter.  
+The functions are written in Node.js and effectively do nothing but return a JSON response. See [`proxies.json`](proxies.json) for more information. Note. You will need to change the code in the proxy URL to match your Function App `_master` secret host key value
+* Use of Node.js with Functions
+* Use of Function Proxies
 
