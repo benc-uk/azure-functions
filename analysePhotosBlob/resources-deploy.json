@@ -14,7 +14,8 @@
       "kind": "ComputerVision",
       "name": "[variables('compVisionAcctName')]",
       "apiVersion": "2016-02-01-preview",
-      "location": "[resourceGroup().location]"
+      "location": "[resourceGroup().location]",
+      "properties": {}
     }    
   ]
 }
