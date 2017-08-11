@@ -9,7 +9,7 @@
                     "DELETE"
                 ]
             },
-            "backendUri": "https://functions-app-demo.azurewebsites.net/api/exampleApi_{request.method}?id={id}&code=12345-CHANGEME-12345"
+            "backendUri": "https://!!changeme!!.azurewebsites.net/api/exampleApi_{request.method}?id={id}&code=!!changeme!!"
         }
     }
 }
