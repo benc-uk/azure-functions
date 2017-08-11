@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 
 // Must be an absolute path.
-private const string PATH_TO_LIB = @"D:\home\site\wwwroot\wrapNativeDLL\ExampleClassLibrary.dll";
+private const string PATH_TO_LIB = @"D:\home\site\wwwroot\callLibraryDLL\ExampleClassLibrary.dll";
 // You would need to know this from creating the library. 
 // NB. You could use a loop/reflection if desired.
 private const string DESIRED_TYPE = "ExampleClass";
@@ -31,7 +31,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceW
     // Load local class library
     dynamic c = LoadLibrary(log);
     string response = c.Hello(name);
-    log.Info($"<response>: {response}");
+    log.Info($"<response from DLL>: {response}");
     return name == null
         ? req.CreateResponse(HttpStatusCode.BadRequest, "Please pass a name on the query string or in the request body")
         : req.CreateResponse(HttpStatusCode.OK,response);
