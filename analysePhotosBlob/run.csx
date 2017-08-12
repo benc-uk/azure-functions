@@ -4,7 +4,6 @@
 
 using Microsoft.WindowsAzure.Storage.Blob;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -24,8 +23,8 @@ public static void Run(CloudBlockBlob triggerBlob, string name, TraceWriter log,
 
     // Build simple JSON request containing blob URL and POST to Computer Vision API
     // - Note, we just pass the URL of the blob (image file) to the API
-    dynamic request = new {url = triggerBlob.Uri.ToString()};
-    var api_resp = postREST(API_ENDPOINT, request, log);
+    dynamic request = new { url = triggerBlob.Uri.ToString() };
+    var api_resp = callCognitiveServiceApi(request);
 
     if(api_resp.message != null) {
         log.Error($"### !ERROR! {api_resp.message}");
@@ -47,17 +46,18 @@ public static void Run(CloudBlockBlob triggerBlob, string name, TraceWriter log,
     log.Info($"### Emailing results via SendGrid");
 }
 
+
+
 //
 // Simple HTTP POST call and JSON convert results 
 //
-public static dynamic postREST(string url, dynamic request_obj, TraceWriter log)
+public static dynamic callCognitiveServiceApi(dynamic request_obj)
 {
     var client = new HttpClient();
-    //var content = new StringContent(request_obj.ToString(), Encoding.UTF8, "application/json");
     var content = new StringContent(JsonConvert.SerializeObject(request_obj), Encoding.UTF8, "application/json");
     
     content.Headers.Add("Ocp-Apim-Subscription-Key", API_KEY);
-    var resp = client.PostAsync(url, content).Result;
+    var resp = client.PostAsync(API_ENDPOINT, content).Result;
     dynamic resp_obj = JsonConvert.DeserializeObject( resp.Content.ReadAsStringAsync().Result );
     return resp_obj;
 }

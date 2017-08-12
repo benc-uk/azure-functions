@@ -34,8 +34,8 @@ print("### I spy with my little eye: {0}".format(desc))
 
 # Send email using SendGrid
 sg = sendgrid.SendGridAPIClient(apikey=os.environ.get('my-sendgrid-key'))
-from_email = Email("benc.uk@gmail.com")
-to_email = Email("benc.uk@gmail.com")
+from_email = Email("changeme@gmail.com")
+to_email = Email("changeme@gmail.com")
 subject = "Azure Functions Python demo result"
 content = Content("text/html", "<h1 style='color:grey'>Azure Functions with Python &amp; Cognitive Services Demo Results</h1><h2>That photo looks like: {0}</h2><br/><img style='max-width:1024px' src='{1}'/><br/><h2>Photo tags:<br/>{2}</h2><br/> BYE!".format(desc, "", tags))
 mail = Mail(from_email, subject, to_email, content)
