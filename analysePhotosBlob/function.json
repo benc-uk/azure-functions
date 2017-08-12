@@ -11,8 +11,8 @@
       "type": "sendGrid",
       "name": "email",
       "apiKey": "SENDGRID_API_KEY",
-      "to": "benc.uk@gmail.com",
-      "from": "benc.uk@gmail.com",
+      "to": "changeme@gmail.com",
+      "from": "changeme@gmail.com",
       "subject": "Azure Functions & Computer Vision Results",
       "direction": "out"
     }
