@@ -1,5 +1,5 @@
 # Demo & Examples of Azure Functions
-<img srv="https://docs.microsoft.com/en-gb/azure/media/index/azurefunctions.svg" height="60px" />
+<img srv="https://docs.microsoft.com/en-gb/azure/media/index/azurefunctions.svg" height="60p" width="60" />
 This is a small shared repo of demo and sample Azure Functions. They are either demos or fulfil a basic usecase.
 
 Several of these functions require secure bits of info like secret keys, these are fetched from environmental variables. To set these variables go into the Function App, and configure app settings as [described here](https://docs.microsoft.com/en-us/azure/azure-functions/functions-how-to-use-azure-function-app-settings)
