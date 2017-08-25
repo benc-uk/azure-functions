@@ -65,8 +65,6 @@ Example reading and writing binary blobs, and using them as images - drawing on 
 This will analyse the image using the cognitive service same as **analysePhotosBlob** but draws the resulting caption on top of the image, it also draws boxes around faces and shows the top 5 tags/topics in the image
 * Output binary Blobs using Streams
 * Drawing and graphics
-* See [README.md](pythonPhotoAnalyse/) in function sub-folder for setup of Python
-
 
 ### exampleApi_Get & exampleApi_Delete
 These functions are used with the Function Proxies feature to create a serverless REST API. The proxy is set up to route HTTP requests to `/apidemo/{id}` to the backend functions `exampleApi_Get` & `exampleApi_Delete` the HTTP method used (e.g. `GET` or `DELETE`) determines which function is invoked, using the `{request.method}` parameter.  
