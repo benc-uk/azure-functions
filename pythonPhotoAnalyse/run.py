@@ -4,10 +4,12 @@ import json
 import requests
 import sendgrid
 from sendgrid.helpers.mail import *
+import base64
 
 # Parameters...
 API_KEY = os.environ['VISION_API_KEY']
 API_ENDPOINT = "https://westeurope.api.cognitive.microsoft.com/vision/v1.0/describe"
+EMAIL = "changeme@gmail.com"
 
 # INPUT TRIGGER - Read the image file 
 # Note. With the Python SDK we are passed the filename, so we need to read() it from the filesystem
@@ -28,17 +30,25 @@ if(api_result.status_code != 200):
 api_result_object = api_result.json()
 
 desc = api_result_object['description']['captions'][0]['text']
-tags = [tag.encode('utf-8') for tag in api_result_object['description']['tags']]
+tags = api_result_object['description']['tags'] 
 
 print("### I spy with my little eye: {0}".format(desc))
 
 # Send email using SendGrid
-sg = sendgrid.SendGridAPIClient(apikey=os.environ.get('my-sendgrid-key'))
-from_email = Email("changeme@gmail.com")
-to_email = Email("changeme@gmail.com")
+sg = sendgrid.SendGridAPIClient(apikey=os.environ.get('SENDGRID_API_KEY'))
+from_email = Email(EMAIL)
+to_email = Email(EMAIL)
 subject = "Azure Functions Python demo result"
 content = Content("text/html", "<h1 style='color:grey'>Azure Functions with Python &amp; Cognitive Services Demo Results</h1><h2>That photo looks like: {0}</h2><br/><img style='max-width:1024px' src='{1}'/><br/><h2>Photo tags:<br/>{2}</h2><br/> BYE!".format(desc, "", tags))
 mail = Mail(from_email, subject, to_email, content)
+
+# Encode image as MIME attachment, Base64 encoded and converted to UTF-8
+image_base64 = base64.b64encode(img_data)
+attachment = Attachment()
+attachment.filename = "analysed-photo.jpg"
+attachment.type     = "image/jpeg"
+attachment.content  = image_base64.decode("utf8")
+mail.add_attachment(attachment);
 
 print("### Sending email via SendGrid...")
 response = sg.client.mail.send.post(request_body=mail.get())
