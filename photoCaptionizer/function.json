@@ -1,0 +1,19 @@
+{
+  "bindings": [
+    {
+      "name": "triggerBlob",
+      "type": "blobTrigger",
+      "direction": "in",
+      "path": "photo-in/{name}",
+      "connection": "AzureWebJobsStorage"
+    },
+    {
+      "type": "blob",
+      "name": "outputBlob",
+      "path": "photo-out/{DateTime}.jpg",
+      "connection": "AzureWebJobsStorage",
+      "direction": "out"
+    }
+  ],
+  "disabled": false
+}
