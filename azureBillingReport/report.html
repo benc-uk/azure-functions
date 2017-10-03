@@ -1,0 +1,33 @@
+<html>
+<head>
+    <title>Weekly Billing Report</title>
+</head>
+<body>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+ 
+        table, th, td {
+            border: 1px solid gray;
+            padding: 5px;
+        } 
+    </style>
+    <h1>Weekly Azure Billing Report: {date}</h1>
+    <h2>Costs by Resource Group</h2>
+    <table id="costsPerResourceGroup">
+        <thead><tr><th>Resource Group</th><th>Costs</th></tr></thead>
+        <tbody>
+            {costsPerResourceGroup}
+        </tbody>
+    </table>
+ 
+    <h2>Cost Details</h2>
+    <table id="costsDetails">
+        <thead><tr><th>Resource Group</th><th>Resource</th><th>Meter</th><th>Usage</th><th>Costs</th></tr></thead>
+        <tbody>
+            {costsDetails}
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "frameworks": {
+    "net46":{
+      "dependencies": {
+        "CodeHollow.AzureBillingApi": "1.1.0.6",
+        "Sendgrid": "9.9.0",
+        "Microsoft.IdentityModel.Clients.ActiveDirectory": "3.13.9"
+      }
+    }
+  }
+}

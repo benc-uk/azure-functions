@@ -20,6 +20,15 @@ This reads a photo from blob storage, then analyses the image with the Azure Cog
 * Dependant Azure resources: Cognitive API, Storage Account (reuse the one that the Function App requires)
 * Requires a SendGrid account and API key, [which is free to sign up and use](https://app.sendgrid.com/signup)
 
+### azureBillingReport
+This uses 
+* Integration with Azure AD
+* Integration with third party libraries
+* Required app settings: SENDGRID_API_KEY, BILLING_API_CLIENT, BILLING_API_SECRET, AZURE_TENANT
+* Dependant Azure resources: App registered in AAD, [follow these instructions](https://codehollow.com/2017/02/using-the-azure-billing-api-to-calculate-the-costs/)
+* Requires a SendGrid account and API key, [which is free to sign up and use](https://app.sendgrid.com/signup)
+
+
 ### serviceBusDemo
 This function is bound to a Service Bus queue, any messages posted on the queue are read, deseralized as JSON, then pushed as output to blob storage
 * Triggering from Service Bus queue
@@ -66,9 +75,9 @@ This will analyse the image using the cognitive service same as **analysePhotosB
 * Output binary Blobs using Streams
 * Drawing and graphics
 
-### exampleApi_Get & exampleApi_Delete
-These functions are used with the Function Proxies feature to create a serverless REST API. The proxy is set up to route HTTP requests to `/apidemo/{id}` to the backend functions `exampleApi_Get` & `exampleApi_Delete` the HTTP method used (e.g. `GET` or `DELETE`) determines which function is invoked, using the `{request.method}` parameter.  
-The functions are written in Node.js and effectively do nothing but return a JSON response. See [`proxies.json`](proxies.json) for more information. Note. You will need to change the code in the proxy URL to match your Function App `_master` secret host key value
+### demoApi_Get & exampleApi_Delete
+These functions are used with the Function Proxies feature to create a serverless REST API. The proxy is set up to route HTTP requests to `/demoapi/{id}` to the backend functions `demoApi_Get` & `demoApi_Delete` the HTTP method used (e.g. `GET` or `DELETE`) determines which function is invoked, using the `{request.method}` parameter.  
+The functions are written in Node.js and effectively do nothing but return a JSON response to appear like a real REST API. See [`proxies.json`](proxies.json) for more information. Note. You will need to change the code in the proxy URL to match your Function App `_master` secret host key value
 * Use of Node.js with Functions
 * Use of Function Proxies
 

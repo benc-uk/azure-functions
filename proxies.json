@@ -3,13 +3,13 @@
     "proxies": {
         "demo-api": {
             "matchCondition": {
-                "route": "/apidemo/{id}",
+                "route": "/demoapi/{id}",
                 "methods": [
                     "GET",
                     "DELETE"
                 ]
             },
-            "backendUri": "https://!!changeme!!.azurewebsites.net/api/exampleApi_{request.method}?id={id}&code=!!changeme!!"
+            "backendUri": "https://!!changeme!!.azurewebsites.net/api/demoApi_{request.method}?id={id}&code=!!changeme!!"
         }
     }
 }
