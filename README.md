@@ -21,7 +21,10 @@ This reads a photo from blob storage, then analyses the image with the Azure Cog
 * Requires a SendGrid account and API key, [which is free to sign up and use](https://app.sendgrid.com/signup)
 
 ### azureBillingReport
-This uses 
+This will generate an Azure billing report with a resource breakdown for your subscription(s) on a given schedule, the default is a week. The function is timer triggered every Monday at 8am. The report is sent via email to a given email address.
+
+This uses the [Code Hollow Billing API](https://github.com/codehollow/AzureBillingApi) and follows the setup and example code on [this blog](https://codehollow.com/2017/09/weekly-azure-billing-report-per-mail-azure-functions/). Some modifications have been made to flatten into a single .csx file and move secrets into app settings.  
+
 * Integration with Azure AD
 * Integration with third party libraries
 * Required app settings: SENDGRID_API_KEY, BILLING_API_CLIENT, BILLING_API_SECRET, AZURE_TENANT
