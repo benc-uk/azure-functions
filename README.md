@@ -1,3 +1,7 @@
+# !! This repo is old, it has some stuff I want to keep just in case, but I've moved everything to Functions v2 !!
+
+---
+
 # Demo & Examples of Azure Functions
 This is a small shared repo of demo and sample Azure Functions. They are either demos or fulfil a basic usecase.
 
