@@ -1,5 +1,6 @@
-# !! This repo is old, it has some stuff I want to keep just in case, but I've moved everything to Functions v2 !!
-
+# No longer maintained!
+This repo is out of date and no longer maintained, it has some stuff I want to keep just in case, but I've moved everything to Functions v2
+### New repo is here https://github.com/benc-uk/functions-v2-js 
 ---
 
 # Demo & Examples of Azure Functions
